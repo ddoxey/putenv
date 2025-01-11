@@ -12,7 +12,7 @@ then
     exit 1
 fi
 
-if gdb -p $PID
+if gdb -p $PID                                   \
        -ex 'source update_env.py'                \
        -ex "update_env ${VAR_NAME}=${NEW_VALUE}" \
        -ex 'detach'                              \
