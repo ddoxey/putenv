@@ -8,24 +8,23 @@ class UpdateEnv(gdb.Command):
     """
 
     def __init__(self):
-        super(UpdateEnv, self).__init__("update_env", gdb.COMMAND_USER)
+        super(UpdateEnv, self).__init__('update_env', gdb.COMMAND_USER)
 
     def invoke(self, arg, from_tty):
         # Parse the argument for the variable name and value
-        if "=" not in arg:
-            gdb.write("Usage: update_env VAR_NAME=VALUE\n", gdb.STDERR)
+        if '=' not in arg:
+            gdb.write('Usage: update_env VAR_NAME=VALUE\n', gdb.STDERR)
             return
 
-        var_name, value = arg.split("=", 1)
+        var_name, value = arg.split('=', 1)
         if not var_name or not value:
-            gdb.write("Error: Invalid format. Use VAR_NAME=VALUE.\n", gdb.STDERR)
+            gdb.write('Error: Invalid format. Use VAR_NAME=VALUE.\n', gdb.STDERR)
             return
 
         # Inject the putenv call
-        gdb.write(f"Updating environment: {var_name}={value}\n")
-        putenv_call = f'((int(*)(const char *))putenv)("{var_name}={value}")'
+        gdb.write(f'Updating environment: {var_name}={value}\n')
+        putenv_call = f'((int)putenv("{var_name}={value}"))'
         gdb.execute(f'call {putenv_call}')
-        gdb.write("Environment updated successfully.\n")
 
 # Register the command with gdb
 UpdateEnv()
